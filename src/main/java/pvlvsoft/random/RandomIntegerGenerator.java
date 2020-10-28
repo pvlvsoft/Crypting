@@ -18,10 +18,17 @@ import java.util.Random;
  * <p>Class of {@link RandomIntegerGenerator} is an abstract representation
  * and implementation of the instances belonging to this class.</p>
  *
- * <p></p>
+ * <p>This class' instances generates integer numbers. <b>These numbers are
+ * pseudo-randoms</b>. All the ranges of the numbers are inclusive, which means
+ * the returned numbers may be equal to the bounds. Practical conclusion is in
+ * usage of indexed collections or in arrays. The size as an upper bound may cause
+ * the {@link IndexOutOfBoundsException}.</p>
  *
  * @author Vojtech Pavlu
  * @version 2020-10-28
+ *
+ * @see NumericGenerator
+ * @see RandomGenerator
  */
 public class RandomIntegerGenerator implements NumericGenerator {
 
@@ -197,6 +204,35 @@ public class RandomIntegerGenerator implements NumericGenerator {
     /* ====== STATIC METHODS ===================================== */
 
 
+    /**
+     * <p>Generates a random integer number.</p>
+     *
+     * @param min   minimum acceptable value
+     * @param max   maximum acceptable value
+     *
+     * @return      pseudo-random number in the given range.
+     *
+     * @throws IllegalArgumentException when the minimum is greater than the maximum
+     */
+    public static Integer getRandomNumber(int min, int max) throws IllegalArgumentException {
+
+        return new RandomIntegerGenerator(min, max).generate();
+    }
+
+
+    /**
+     * <p>Generates a random integer number in the range of {@code 0} to upper range.</p>
+     *
+     * @param max   maximum acceptable value
+     *
+     * @return      pseudo-random number in the given range.
+     *
+     * @throws IllegalArgumentException when the the maximum is smaller than {@code 0}.
+     */
+    public static Integer getRandomNumber(int max) throws IllegalArgumentException {
+
+        return getRandomNumber(DEFAULT_MINIMUM, max);
+    }
 
 
     /* =========================================================== */
