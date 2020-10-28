@@ -144,7 +144,6 @@ public class RandomIntegerGeneratorTest {
 
             if(lower && upper) {
 
-                System.out.println("Did it in " + i + " rows.");
                 break;
             }
         }

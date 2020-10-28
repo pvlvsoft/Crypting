@@ -15,7 +15,9 @@ package pvlvsoft.random;
  * of methods overridden by it's descendants.</p>
  *
  *
- * <p></p>
+ * <p>This interface defines basic set of methods to work with generator. It
+ * set's a default mutual platform for other kinds of generators, such as
+ * {@link NumericGenerator}s (specially {@link RandomIntegerGenerator}).</p>
  *
  * @author Vojtech Pavlu
  * @version 2020-10-28

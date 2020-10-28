@@ -2,7 +2,6 @@ package pvlvsoft.random;
 
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 
 /**
@@ -18,8 +17,8 @@ import java.math.BigInteger;
  * <p>Interface of {@link NumericGenerator} defines a basic set of signatures
  * of methods overridden by it's descendants.</p>
  *
- *
- * <p></p>
+ * <p>This interface specifies instances of {@link RandomGenerator} generating
+ * numeric outputs. For example instances of the class of {@link RandomIntegerGenerator}.</p>
  *
  * @author Vojtech Pavlu
  * @version 2020-10-28
