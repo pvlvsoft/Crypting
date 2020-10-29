@@ -29,7 +29,7 @@ public class RandomListPickerTest {
     @Test
     public void pick_LPM_REPEATING() {
 
-        RandomListPicker<Integer> rlp = new RandomListPicker<>(NUMBERS, PickingMethod.UNLIMITED_USAGE);
+        RandomListSinglePicker<Integer> rlp = new RandomListSinglePicker<>(NUMBERS, PickingMethod.UNLIMITED_USAGE);
         Integer defaultNumber = rlp.pick();
 
         int rows = 10000;
@@ -54,7 +54,7 @@ public class RandomListPickerTest {
     @Test
     public void pick_LPM_WITHOUT_REPEATING() {
 
-        RandomListPicker<Integer> rlp = new RandomListPicker<>(NUMBERS, PickingMethod.REMOVE_AFTER_USE);
+        RandomListSinglePicker<Integer> rlp = new RandomListSinglePicker<>(NUMBERS, PickingMethod.REMOVE_AFTER_USE);
         Integer defaultNumber = rlp.pick();
 
         int rows = 10000;

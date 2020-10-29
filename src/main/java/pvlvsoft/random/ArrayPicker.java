@@ -1,7 +1,11 @@
 package pvlvsoft.random;
 
 
-import java.util.Vector;
+import pvlvsoft.ArrayItemsManager;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -18,7 +22,7 @@ import java.util.Vector;
  * and implementation of the instances belonging to this class.</p>
  *
  * <p>This class defines instances build over an {@link Object}{@code []}.
- * It also is an {@link RandomPicker} so it can pick a random element
+ * It also is an {@link RandomSinglePicker} so it can pick a random element
  * contained. It also is able to add and remove items if needed.</p>
  *
  * <p>This class uses instance of {@link PickingMethod} to resolve
@@ -27,16 +31,18 @@ import java.util.Vector;
  * @author Vojtech Pavlu
  * @version 2020-10-28
  *
- * @see pvlvsoft.random.RandomPicker
- * @see RandomListPicker
+ * @see RandomSinglePicker
+ * @see RandomListSinglePicker
  * @see PickingMethod
  */
-public class ArrayPicker<T> implements RandomPicker<T> {
+public class ArrayPicker<T>
+        extends ArrayItemsManager<T>
+        implements RandomSinglePicker<T>, RandomMultiPicker<T> {
 
     /* =========================================================== */
     /* ====== INSTANCE VARIABLES ================================= */
 
-    private Object[] array;
+    //private Object[] array;
     private final PickingMethod pickingMethod;
 
 
@@ -53,7 +59,7 @@ public class ArrayPicker<T> implements RandomPicker<T> {
     /**
      * <p>Private constructor preventing creation of empty instances.</p>
      */
-    private ArrayPicker() {
+    protected ArrayPicker() {
 
         this.pickingMethod = PickingMethod.UNLIMITED_USAGE;
     }
@@ -93,6 +99,16 @@ public class ArrayPicker<T> implements RandomPicker<T> {
     /* =========================================================== */
     /* ====== OVERRIDDEN METHODS ================================= */
 
+
+    @Override
+    public String toString() {
+        return "ArrayPicker{" +
+                "array=" + Arrays.toString(array) +
+                ", pickingMethod=" + pickingMethod +
+                '}';
+    }
+
+
     /**
      * <p>Randomly picks an object from the given structure.</p>
      *
@@ -119,94 +135,196 @@ public class ArrayPicker<T> implements RandomPicker<T> {
     }
 
     /**
-     * <p>Returns size of the list represented by {@code int}-formed number.</p>
+     * <p>Returns a {@link List} of random length.</p>
      *
-     * @return number of elements the picker chooses from.
+     * <p>The size of the list is minimum 0 and maximum the
+     * length of the MultiPicker.</p>
+     *
+     * <p>The repetition of the items is allowed by default.</p>
+     *
+     * @return {@link List} of random items. Some items may
+     * be included more then once.
      */
     @Override
-    public int size() {
-
-        return this.array.length;
+    public List<T> pickList() {
+        return null;
     }
 
     /**
-     * <p>Adds the given element to the list of this generator picks.</p>
+     * <p>Returns a {@link List} of random items from the Multipicker.</p>
      *
-     * @param toBeAdded Element to be added.
+     * <p>The repetition of the items is allowed by default.</p>
+     *
+     * @param size size of the list.
+     *
+     * @return {@link List} of the randomly picked items with specified size.
+     * Some items may be included more then once.
+     *
+     * @throws IllegalArgumentException when the size is < 0
      */
     @Override
-    public void add(T toBeAdded) {
+    public List<T> pickList(int size) throws IllegalArgumentException {
+        return null;
+    }
 
-        Object[] array = new Object[this.size() + 1];
+    /**
+     * <p>Returns a {@link List} of random items with or without repetition.</p>
+     *
+     * <p>Minimum size of the result list is 0, the maximum may be:
+     *
+     * <ul>
+     *     <li>equal to number of unique instances in the multipicker</li>
+     *     <li>theoretically infinite (max. length of the multipicker selaer)</li>
+     * </ul>
+     * <p>
+     * Depends on the {@code repeat} parameter.
+     * </p>
+     *
+     * @param repeat specifies if the instances will or will not be
+     *               repeating.
+     *
+     * @return {@link List} of randomly picked instances from the multipicker.
+     */
+    @Override
+    public List<T> pickList(boolean repeat) {
+        return null;
+    }
 
-        if (this.size() >= 0) {
+    /**
+     * <p>Returns a {@link List} of random items with or without repetition.</p>
+     *
+     * <p>Minimum size of the result list is 0, the maximum may be:
+     *
+     * <ul>
+     *     <li>equal to number of unique instances in the multipicker</li>
+     *     <li>theoretically infinite (max. length of the multipicker selaer)</li>
+     * </ul>
+     * <p>
+     * Depends on the {@code repeat} parameter.
+     * </p>
+     *
+     * @param size   max size of the list
+     * @param repeat specifies if the instances will or will not be
+     *               repeating.
+     *
+     * @return {@link List} of randomly picked instances from the multipicker.
+     *
+     * @throws IllegalArgumentException when the size is < 0
+     */
+    @Override
+    public List<T> pickList(int size, boolean repeat) throws IllegalArgumentException {
 
-            System.arraycopy(this.array, 0, array, 0, this.size());
+        if(size < 0) {
+
+            throw new IllegalArgumentException(String.format(
+                    "Size of the list has to be greater than 0! You gave me %s",
+                    size)
+            );
         }
 
-        array[this.size()] = toBeAdded;
+        List<T> list = new ArrayList<>();
 
-        this.array = array;
-    }
+        if(!repeat) {
 
-    /**
-     * <p>Removes the given {@code T} instance from the list.</p>
-     *
-     * @param toBeRemoved instance to be removed from this.
-     */
-    @Override
-    public void remove(T toBeRemoved) {
+            int uniques = getNumberOfUniques();
 
-        Object[] array = new Object[this.size() - 1];
+            if (uniques < size) {
 
-        for (int i = 0; i < array.length; i++) {
+                return getUniques();
 
-            if(!this.array[i].equals(toBeRemoved)) {
+            } else {
 
-                array[i] = this.array[i];
+                for (int i = 0; i < size; i++) {
+
+                    boolean done = false;
+
+                    while (!done) {
+
+                        int random = RandomIntegerGenerator.getRandomNumber(this.size());
+                        T item = this.get(random);
+
+                        if (!list.contains(item)) {
+
+                            list.add(item);
+                            done = true;
+                        }
+                    }
+                }
+
+                return list;
             }
         }
 
-        this.array = array;
+        return null;
     }
-
-    /**
-     * <p>Removes instance by it's index from the list.</p>
-     *
-     * @param index representation of an instance in the
-     *              list to be used to remove by.
-     */
-    @Override
-    public void remove(int index) {
-
-        Object[] array = new Object[this.size() - 1];
-
-        for (int i = 0; i < this.size(); i++) {
-
-            if(i < index) {
-
-                array[i] = this.array[i];
-
-            } else if(i > index) {
-
-                array[i-1] = this.array[i];
-            }
-        }
-
-        this.array = array;
-    }
-
-
-
 
     /* =========================================================== */
     /* ====== INSTANCE METHODS =================================== */
 
 
+    /**
+     * <p>Protected method to prevent using it wrong. This method substitutes the
+     * current {@code array} with the given one.</p>
+     *
+     * <p>This method should be used carefully and responsibly.</p>
+     *
+     * @param array to substitute the current one
+     */
+    protected void setArray(T[] array) {
+
+        this.array = array;
+    }
+
+
+    private List<T> getUniques() {
+
+        List<T> list = new ArrayList<>();
+
+        for (int i = 0; i < this.size(); i++) {
+
+            if(!list.contains(this.get(i))) {
+
+                list.add(this.get(i));
+
+            }
+        }
+
+        return list;
+    }
+
+    private int getNumberOfUniques() {
+
+        return getUniques().size();
+    }
 
 
     /* =========================================================== */
     /* ====== STATIC METHODS ===================================== */
+
+
+    public static Object[] concatArrays(Object[]... arrays) {
+
+        int tl = 0;
+        int pointer = 0;
+
+        for (Object[] a : arrays) {
+
+            tl = tl + a.length;
+        }
+
+        Object[] oa = new Object[tl];
+
+        for (Object[] objects : arrays) {
+
+            for (Object o : objects) {
+
+                oa[pointer] = o;
+                pointer++;
+            }
+        }
+
+        return oa;
+    }
 
 
 
@@ -214,10 +332,6 @@ public class ArrayPicker<T> implements RandomPicker<T> {
     /* =========================================================== */
     /* ====== GETTERS AND SETTERS ================================ */
 
-    public Object[] getArray() {
-
-        return array;
-    }
 
     public PickingMethod getPickingMethod() {
 

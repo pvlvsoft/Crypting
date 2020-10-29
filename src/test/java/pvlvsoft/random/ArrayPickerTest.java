@@ -82,7 +82,19 @@ public class ArrayPickerTest {
 
         array.add(addedValue);
 
-        assertEquals(array.size(), 6);
-        assertEquals(array.getArray()[5], addedValue);
+        assertEquals(6, array.size());
+        assertEquals(addedValue, array.get(5));
+    }
+
+
+    @Test
+    public void multipick_without_repetition() {
+
+        ArrayPicker<String> array = new ArrayPicker<>(STRINGS);
+
+        array.add("A");
+        array.add("Z");
+
+        assertEquals(6, array.pickList(50, false).size());
     }
 }

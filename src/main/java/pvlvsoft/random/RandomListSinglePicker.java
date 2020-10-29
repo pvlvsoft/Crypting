@@ -15,19 +15,19 @@ import java.util.List;
  * PROJECT WAS CREATED JUST FOR FUN.</i>
  *
  *
- * <p>Class of {@link RandomListPicker} is an abstract representation
+ * <p>Class of {@link RandomListSinglePicker} is an abstract representation
  * and implementation of the instances belonging to this class.</p>
  *
- * <p>This implementation of {@link RandomPicker} is a general instance
+ * <p>This implementation of {@link RandomSinglePicker} is a general instance
  * definition of a {@link List} random picker.</p>
  *
  * @author Vojtech Pavlu
  * @version 2020-10-28
  *
- * @see RandomPicker
+ * @see RandomSinglePicker
  * @see ArrayPicker
  */
-public class RandomListPicker<T> implements RandomPicker<T> {
+public class RandomListSinglePicker<T> implements RandomSinglePicker<T> {
 
     /* =========================================================== */
     /* ====== INSTANCE VARIABLES ================================= */
@@ -59,21 +59,21 @@ public class RandomListPicker<T> implements RandomPicker<T> {
     /* ====== CONSTRUCTORS ======================================= */
 
 
-    private RandomListPicker() {
+    private RandomListSinglePicker() {
 
         this.list = new ArrayList<>();
         this.pickingMethod = PickingMethod.UNLIMITED_USAGE;
     }
 
 
-    public RandomListPicker(List<T> list) {
+    public RandomListSinglePicker(List<T> list) {
 
         this.list = list;
         this.pickingMethod = PickingMethod.UNLIMITED_USAGE;
     }
 
 
-    public RandomListPicker(List<T> list, PickingMethod method) {
+    public RandomListSinglePicker(List<T> list, PickingMethod method) {
 
         this.list = list;
         this.pickingMethod = method;
@@ -113,7 +113,6 @@ public class RandomListPicker<T> implements RandomPicker<T> {
      *
      * @return number of elements the picker chooses from.
      */
-    @Override
     public int size() {
 
         return this.list.size();
@@ -124,7 +123,6 @@ public class RandomListPicker<T> implements RandomPicker<T> {
      *
      * @param toBeAdded Element to be added.
      */
-    @Override
     public void add(T toBeAdded) {
 
         this.list.add(toBeAdded);
@@ -136,7 +134,6 @@ public class RandomListPicker<T> implements RandomPicker<T> {
      *
      * @param toBeRemoved   instance to be removed from this.
      */
-    @Override
     public void remove(T toBeRemoved) {
 
         this.list.remove(toBeRemoved);
@@ -149,7 +146,6 @@ public class RandomListPicker<T> implements RandomPicker<T> {
      * @param index representation of an instance in the
      *              list to be used to remove by.
      */
-    @Override
     public void remove(int index) {
 
         this.list.remove(index);
